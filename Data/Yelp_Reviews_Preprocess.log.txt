@@ -1,0 +1,890 @@
+
+Yelp Reviews Preprocess for Warehouse Construction
+======================================================================
+
+Yelp Reviews - Initial Summary
+
+
+Number of Rows: 8635403, Columns: 9
+             Number of Unique Values  Number of Missing Values  \
+review_id                    8635403                         0   
+user_id                      2189457                         0   
+business_id                   160585                         0   
+stars                              5                         0   
+useful                           233                         0   
+funny                            190                         0   
+cool                             207                         0   
+text                         8616410                         0   
+date                         8485984                         0   
+
+            Data type of variable  
+review_id                  object  
+user_id                    object  
+business_id                object  
+stars                       int64  
+useful                      int64  
+funny                       int64  
+cool                        int64  
+text                       object  
+date               datetime64[ns]  
+None
+======================================================================
+
+Yelp Business - Initial Summary
+
+
+Number of Rows: 160585, Columns: 14
+              Number of Unique Values  Number of Missing Values  \
+business_id                    160585                         0   
+name                           125850                         0   
+address                        123895                         0   
+city                              836                         0   
+state                              31                         0   
+postal_code                      5779                         0   
+latitude                       137397                         0   
+longitude                      133643                         0   
+stars                               9                         0   
+review_count                     1281                         0   
+is_open                             2                         0   
+attributes                      90475                         0   
+categories                      88115                       115   
+hours                           50858                         0   
+
+             Data type of variable  
+business_id                 object  
+name                        object  
+address                     object  
+city                        object  
+state                       object  
+postal_code                 object  
+latitude                   float64  
+longitude                  float64  
+stars                      float64  
+review_count                 int64  
+is_open                      int64  
+attributes                  object  
+categories                  object  
+hours                       object  
+None
+======================================================================
+
+Yelp User - Initial Summary
+
+
+Number of Rows: 2189457, Columns: 22
+                    Number of Unique Values  Number of Missing Values  \
+user_id                             2189457                         0   
+name                                 153611                         0   
+review_count                           1917                         0   
+yelping_since                       2179957                         0   
+useful                                 5204                         0   
+funny                                  3680                         0   
+cool                                   4381                         0   
+elite                                  1235                         0   
+friends                             1212599                         0   
+fans                                    680                         0   
+average_stars                           401                         0   
+compliment_hot                         1318                         0   
+compliment_more                         350                         0   
+compliment_profile                      347                         0   
+compliment_cute                         317                         0   
+compliment_list                         191                         0   
+compliment_note                         965                         0   
+compliment_plain                       1644                         0   
+compliment_cool                        1581                         0   
+compliment_funny                       1581                         0   
+compliment_writer                       822                         0   
+compliment_photos                       952                         0   
+
+                   Data type of variable  
+user_id                           object  
+name                              object  
+review_count                       int64  
+yelping_since                     object  
+useful                             int64  
+funny                              int64  
+cool                               int64  
+elite                             object  
+friends                           object  
+fans                               int64  
+average_stars                    float64  
+compliment_hot                     int64  
+compliment_more                    int64  
+compliment_profile                 int64  
+compliment_cute                    int64  
+compliment_list                    int64  
+compliment_note                    int64  
+compliment_plain                   int64  
+compliment_cool                    int64  
+compliment_funny                   int64  
+compliment_writer                  int64  
+compliment_photos                  int64  
+None
+======================================================================
+
+Yelp Tip - Initial Summary
+
+
+Number of Rows: 1161995, Columns: 5
+                  Number of Unique Values  Number of Missing Values  \
+user_id                            339244                         0   
+business_id                        110915                         0   
+text                              1090182                         0   
+date                              1158473                         0   
+compliment_count                       11                         0   
+
+                 Data type of variable  
+user_id                         object  
+business_id                     object  
+text                            object  
+date                    datetime64[ns]  
+compliment_count                 int64  
+None
+======================================================================
+
+Yelp Checkin - Initial Summary
+
+
+Number of Rows: 138876, Columns: 2
+             Number of Unique Values  Number of Missing Values  \
+business_id                   138876                         0   
+date                          138875                         0   
+
+            Data type of variable  
+business_id                object  
+date                       object  
+None
+======================================================================
+
+Process Yelp Review and Business for data warehouse construction:
+
+Summary - Reviews joined with Business:
+Number of Rows: 8635403, Columns: 22
+                      Number of Unique Values  Number of Missing Values  \
+review_id                             8635403                         0   
+user_id                               2189457                         0   
+business_id                            160585                         0   
+stars_reviews                               5                         0   
+useful_reviews                            233                         0   
+funny_reviews                             190                         0   
+cool_reviews                              207                         0   
+text_reviews                          8616410                         0   
+date_reviews                          8485984                         0   
+name_business                          125850                         0   
+address                                123895                         0   
+city                                      836                         0   
+state                                      31                         0   
+postal_code                              5779                         0   
+latitude                               137397                         0   
+longitude                              133643                         0   
+stars_business                              9                         0   
+review_countbusiness                     1281                         0   
+is_open                                     2                         0   
+attributes_business                     90475                         0   
+categories_business                     88115                       897   
+hours_business                          50858                         0   
+
+                     Data type of variable  
+review_id                           object  
+user_id                             object  
+business_id                         object  
+stars_reviews                        int64  
+useful_reviews                       int64  
+funny_reviews                        int64  
+cool_reviews                         int64  
+text_reviews                        object  
+date_reviews                datetime64[ns]  
+name_business                       object  
+address                             object  
+city                                object  
+state                               object  
+postal_code                         object  
+latitude                           float64  
+longitude                          float64  
+stars_business                     float64  
+review_countbusiness                 int64  
+is_open                              int64  
+attributes_business                 object  
+categories_business                 object  
+hours_business                      object  
+None
+======================================================================
+
+Dimensions after finding most complete cases: (8634506, 22)
+======================================================================
+
+Process Yelp User for data warehouse construction:
+
+Summary - Reviews + Business joined with User:
+Number of Rows: 8634506, Columns: 39
+                         Number of Unique Values  Number of Missing Values  \
+review_id                                8634506                         0   
+user_id                                  2189158                         0   
+business_id                               160470                         0   
+stars_reviews                                  5                         0   
+useful_reviews                               233                         0   
+funny_reviews                                190                         0   
+cool_reviews                                 207                         0   
+text_reviews                             8615518                         0   
+date_reviews                             8485121                         0   
+name_business                             125752                         0   
+address                                   123812                         0   
+city                                         835                         0   
+state                                         31                         0   
+postal_code                                 5777                         0   
+latitude                                  137322                         0   
+longitude                                 133580                         0   
+stars_business                                 9                         0   
+review_countbusiness                        1281                         0   
+is_open                                        2                         0   
+attributes_business                        90475                         0   
+categories_business                        88115                         0   
+hours_business                             50858                         0   
+review_count_user                           1917                         0   
+yelping_since_user                       2179664                         0   
+useful                                      5204                         0   
+funny_user                                  3680                         0   
+cool_user                                   4381                         0   
+eliter_user                                 1235                         0   
+average_stars_user                           401                         0   
+compliment_hot_user                         1318                         0   
+compliment_more_user                         350                         0   
+compliment_profile_user                      347                         0   
+compliment_cute_user                         317                         0   
+compliment_list_user                         191                         0   
+compliment_note_user                         965                         0   
+compliment_plain_user                       1644                         0   
+compliment_cool_user                        1581                         0   
+compliment_funny_user                       1581                         0   
+compliment_writer_user                       822                         0   
+
+                        Data type of variable  
+review_id                              object  
+user_id                                object  
+business_id                            object  
+stars_reviews                           int64  
+useful_reviews                          int64  
+funny_reviews                           int64  
+cool_reviews                            int64  
+text_reviews                           object  
+date_reviews                   datetime64[ns]  
+name_business                          object  
+address                                object  
+city                                   object  
+state                                  object  
+postal_code                            object  
+latitude                              float64  
+longitude                             float64  
+stars_business                        float64  
+review_countbusiness                    int64  
+is_open                                 int64  
+attributes_business                    object  
+categories_business                    object  
+hours_business                         object  
+review_count_user                       int64  
+yelping_since_user                     object  
+useful                                  int64  
+funny_user                              int64  
+cool_user                               int64  
+eliter_user                            object  
+average_stars_user                    float64  
+compliment_hot_user                     int64  
+compliment_more_user                    int64  
+compliment_profile_user                 int64  
+compliment_cute_user                    int64  
+compliment_list_user                    int64  
+compliment_note_user                    int64  
+compliment_plain_user                   int64  
+compliment_cool_user                    int64  
+compliment_funny_user                   int64  
+compliment_writer_user                  int64  
+None
+======================================================================
+
+Process Yelp Tip for data warehouse construction:
+
+Summary - Tip after Compliment Count Sums:
+Number of Rows: 110915, Columns: 4
+                                  Number of Unique Values  \
+business_id                                        110915   
+name_business                                       83834   
+compliment_count_tip_idSum                             23   
+compliment_count_tip_businessSum                       27   
+
+                                  Number of Missing Values  \
+business_id                                              0   
+name_business                                            0   
+compliment_count_tip_idSum                               0   
+compliment_count_tip_businessSum                         0   
+
+                                 Data type of variable  
+business_id                                     object  
+name_business                                   object  
+compliment_count_tip_idSum                       int64  
+compliment_count_tip_businessSum                 int64  
+None
+======================================================================
+
+Summary - Reviews + Business + User joined with Tip:
+Number of Rows: 8023913, Columns: 41
+                                  Number of Unique Values  \
+review_id                                         8023884   
+user_id                                           2054939   
+business_id                                        110915   
+stars_reviews                                           5   
+useful_reviews                                        232   
+funny_reviews                                         189   
+cool_reviews                                          206   
+text_reviews                                      8006721   
+date_reviews                                      7894683   
+name_business                                       83834   
+address                                             89257   
+city                                                  647   
+state                                                  22   
+postal_code                                          4795   
+latitude                                           100020   
+longitude                                           98084   
+stars_business                                          9   
+review_countbusiness                                 1281   
+is_open                                                 2   
+attributes_business                                 75997   
+categories_business                                 64239   
+hours_business                                      39102   
+review_count_user                                    1917   
+yelping_since_user                                2046594   
+useful                                               5189   
+funny_user                                           3669   
+cool_user                                            4367   
+eliter_user                                          1228   
+average_stars_user                                    401   
+compliment_hot_user                                  1312   
+compliment_more_user                                  349   
+compliment_profile_user                               346   
+compliment_cute_user                                  315   
+compliment_list_user                                  190   
+compliment_note_user                                  961   
+compliment_plain_user                                1640   
+compliment_cool_user                                 1576   
+compliment_funny_user                                1576   
+compliment_writer_user                                820   
+compliment_count_tip_idSum                             23   
+compliment_count_tip_businessSum                       27   
+
+                                  Number of Missing Values  \
+review_id                                               29   
+user_id                                                 29   
+business_id                                              0   
+stars_reviews                                           29   
+useful_reviews                                          29   
+funny_reviews                                           29   
+cool_reviews                                            29   
+text_reviews                                            29   
+date_reviews                                            29   
+name_business                                            0   
+address                                                 29   
+city                                                    29   
+state                                                   29   
+postal_code                                             29   
+latitude                                                29   
+longitude                                               29   
+stars_business                                          29   
+review_countbusiness                                    29   
+is_open                                                 29   
+attributes_business                                     29   
+categories_business                                     29   
+hours_business                                          29   
+review_count_user                                       29   
+yelping_since_user                                      29   
+useful                                                  29   
+funny_user                                              29   
+cool_user                                               29   
+eliter_user                                             29   
+average_stars_user                                      29   
+compliment_hot_user                                     29   
+compliment_more_user                                    29   
+compliment_profile_user                                 29   
+compliment_cute_user                                    29   
+compliment_list_user                                    29   
+compliment_note_user                                    29   
+compliment_plain_user                                   29   
+compliment_cool_user                                    29   
+compliment_funny_user                                   29   
+compliment_writer_user                                  29   
+compliment_count_tip_idSum                               0   
+compliment_count_tip_businessSum                         0   
+
+                                 Data type of variable  
+review_id                                       object  
+user_id                                         object  
+business_id                                     object  
+stars_reviews                                  float64  
+useful_reviews                                 float64  
+funny_reviews                                  float64  
+cool_reviews                                   float64  
+text_reviews                                    object  
+date_reviews                            datetime64[ns]  
+name_business                                   object  
+address                                         object  
+city                                            object  
+state                                           object  
+postal_code                                     object  
+latitude                                       float64  
+longitude                                      float64  
+stars_business                                 float64  
+review_countbusiness                           float64  
+is_open                                        float64  
+attributes_business                             object  
+categories_business                             object  
+hours_business                                  object  
+review_count_user                              float64  
+yelping_since_user                              object  
+useful                                         float64  
+funny_user                                     float64  
+cool_user                                      float64  
+eliter_user                                     object  
+average_stars_user                             float64  
+compliment_hot_user                            float64  
+compliment_more_user                           float64  
+compliment_profile_user                        float64  
+compliment_cute_user                           float64  
+compliment_list_user                           float64  
+compliment_note_user                           float64  
+compliment_plain_user                          float64  
+compliment_cool_user                           float64  
+compliment_funny_user                          float64  
+compliment_writer_user                         float64  
+compliment_count_tip_idSum                       int64  
+compliment_count_tip_businessSum                 int64  
+None
+======================================================================
+
+Summary - Complete cases of Reviews + Business + User + Tip:
+Number of Rows: 8023884, Columns: 41
+                                  Number of Unique Values  \
+review_id                                         8023884   
+user_id                                           2054939   
+business_id                                        110886   
+stars_reviews                                           5   
+useful_reviews                                        232   
+funny_reviews                                         189   
+cool_reviews                                          206   
+text_reviews                                      8006721   
+date_reviews                                      7894683   
+name_business                                       83810   
+address                                             89257   
+city                                                  647   
+state                                                  22   
+postal_code                                          4795   
+latitude                                           100020   
+longitude                                           98084   
+stars_business                                          9   
+review_countbusiness                                 1281   
+is_open                                                 2   
+attributes_business                                 75997   
+categories_business                                 64239   
+hours_business                                      39102   
+review_count_user                                    1917   
+yelping_since_user                                2046594   
+useful                                               5189   
+funny_user                                           3669   
+cool_user                                            4367   
+eliter_user                                          1228   
+average_stars_user                                    401   
+compliment_hot_user                                  1312   
+compliment_more_user                                  349   
+compliment_profile_user                               346   
+compliment_cute_user                                  315   
+compliment_list_user                                  190   
+compliment_note_user                                  961   
+compliment_plain_user                                1640   
+compliment_cool_user                                 1576   
+compliment_funny_user                                1576   
+compliment_writer_user                                820   
+compliment_count_tip_idSum                             23   
+compliment_count_tip_businessSum                       27   
+
+                                  Number of Missing Values  \
+review_id                                                0   
+user_id                                                  0   
+business_id                                              0   
+stars_reviews                                            0   
+useful_reviews                                           0   
+funny_reviews                                            0   
+cool_reviews                                             0   
+text_reviews                                             0   
+date_reviews                                             0   
+name_business                                            0   
+address                                                  0   
+city                                                     0   
+state                                                    0   
+postal_code                                              0   
+latitude                                                 0   
+longitude                                                0   
+stars_business                                           0   
+review_countbusiness                                     0   
+is_open                                                  0   
+attributes_business                                      0   
+categories_business                                      0   
+hours_business                                           0   
+review_count_user                                        0   
+yelping_since_user                                       0   
+useful                                                   0   
+funny_user                                               0   
+cool_user                                                0   
+eliter_user                                              0   
+average_stars_user                                       0   
+compliment_hot_user                                      0   
+compliment_more_user                                     0   
+compliment_profile_user                                  0   
+compliment_cute_user                                     0   
+compliment_list_user                                     0   
+compliment_note_user                                     0   
+compliment_plain_user                                    0   
+compliment_cool_user                                     0   
+compliment_funny_user                                    0   
+compliment_writer_user                                   0   
+compliment_count_tip_idSum                               0   
+compliment_count_tip_businessSum                         0   
+
+                                 Data type of variable  
+review_id                                       object  
+user_id                                         object  
+business_id                                     object  
+stars_reviews                                  float64  
+useful_reviews                                 float64  
+funny_reviews                                  float64  
+cool_reviews                                   float64  
+text_reviews                                    object  
+date_reviews                            datetime64[ns]  
+name_business                                   object  
+address                                         object  
+city                                            object  
+state                                           object  
+postal_code                                     object  
+latitude                                       float64  
+longitude                                      float64  
+stars_business                                 float64  
+review_countbusiness                           float64  
+is_open                                        float64  
+attributes_business                             object  
+categories_business                             object  
+hours_business                                  object  
+review_count_user                              float64  
+yelping_since_user                              object  
+useful                                         float64  
+funny_user                                     float64  
+cool_user                                      float64  
+eliter_user                                     object  
+average_stars_user                             float64  
+compliment_hot_user                            float64  
+compliment_more_user                           float64  
+compliment_profile_user                        float64  
+compliment_cute_user                           float64  
+compliment_list_user                           float64  
+compliment_note_user                           float64  
+compliment_plain_user                          float64  
+compliment_cool_user                           float64  
+compliment_funny_user                          float64  
+compliment_writer_user                         float64  
+compliment_count_tip_idSum                       int64  
+compliment_count_tip_businessSum                 int64  
+None
+======================================================================
+
+Process Yelp Checkins for data warehouse construction:
+
+Summary - Reviews + Business + User + Tip joined with Checkin:
+Number of Rows: 8023884, Columns: 46
+                                  Number of Unique Values  \
+review_id                                         8023884   
+user_id                                           2054939   
+business_id                                        110886   
+stars_reviews                                           5   
+useful_reviews                                        232   
+funny_reviews                                         189   
+cool_reviews                                          206   
+text_reviews                                      8006721   
+date_reviews                                      7894683   
+name_business                                       83810   
+address                                             89257   
+city                                                  647   
+state                                                  22   
+postal_code                                          4795   
+latitude                                           100020   
+longitude                                           98084   
+stars_business                                          9   
+review_countbusiness                                 1281   
+is_open                                                 2   
+attributes_business                                 75997   
+categories_business                                 64239   
+hours_business                                      39102   
+review_count_user                                    1917   
+yelping_since_user                                2046594   
+useful                                               5189   
+funny_user                                           3669   
+cool_user                                            4367   
+eliter_user                                          1228   
+average_stars_user                                    401   
+compliment_hot_user                                  1312   
+compliment_more_user                                  349   
+compliment_profile_user                               346   
+compliment_cute_user                                  315   
+compliment_list_user                                  190   
+compliment_note_user                                  961   
+compliment_plain_user                                1640   
+compliment_cool_user                                 1576   
+compliment_funny_user                                1576   
+compliment_writer_user                                820   
+compliment_count_tip_idSum                             23   
+compliment_count_tip_businessSum                       27   
+businessCheckin_date                               106642   
+dateDay_checkinSum                                   2686   
+dateYear_checkinSum                                  2686   
+dateYearMonth_checkinSum                             2686   
+dateYeaWeek_checkinSum                               2686   
+
+                                  Number of Missing Values  \
+review_id                                                0   
+user_id                                                  0   
+business_id                                              0   
+stars_reviews                                            0   
+useful_reviews                                           0   
+funny_reviews                                            0   
+cool_reviews                                             0   
+text_reviews                                             0   
+date_reviews                                             0   
+name_business                                            0   
+address                                                  0   
+city                                                     0   
+state                                                    0   
+postal_code                                              0   
+latitude                                                 0   
+longitude                                                0   
+stars_business                                           0   
+review_countbusiness                                     0   
+is_open                                                  0   
+attributes_business                                      0   
+categories_business                                      0   
+hours_business                                           0   
+review_count_user                                        0   
+yelping_since_user                                       0   
+useful                                                   0   
+funny_user                                               0   
+cool_user                                                0   
+eliter_user                                              0   
+average_stars_user                                       0   
+compliment_hot_user                                      0   
+compliment_more_user                                     0   
+compliment_profile_user                                  0   
+compliment_cute_user                                     0   
+compliment_list_user                                     0   
+compliment_note_user                                     0   
+compliment_plain_user                                    0   
+compliment_cool_user                                     0   
+compliment_funny_user                                    0   
+compliment_writer_user                                   0   
+compliment_count_tip_idSum                               0   
+compliment_count_tip_businessSum                         0   
+businessCheckin_date                                 71621   
+dateDay_checkinSum                                   71621   
+dateYear_checkinSum                                  71621   
+dateYearMonth_checkinSum                             71621   
+dateYeaWeek_checkinSum                               71621   
+
+                                 Data type of variable  
+review_id                                       object  
+user_id                                         object  
+business_id                                     object  
+stars_reviews                                  float64  
+useful_reviews                                 float64  
+funny_reviews                                  float64  
+cool_reviews                                   float64  
+text_reviews                                    object  
+date_reviews                            datetime64[ns]  
+name_business                                   object  
+address                                         object  
+city                                            object  
+state                                           object  
+postal_code                                     object  
+latitude                                       float64  
+longitude                                      float64  
+stars_business                                 float64  
+review_countbusiness                           float64  
+is_open                                        float64  
+attributes_business                             object  
+categories_business                             object  
+hours_business                                  object  
+review_count_user                              float64  
+yelping_since_user                              object  
+useful                                         float64  
+funny_user                                     float64  
+cool_user                                      float64  
+eliter_user                                     object  
+average_stars_user                             float64  
+compliment_hot_user                            float64  
+compliment_more_user                           float64  
+compliment_profile_user                        float64  
+compliment_cute_user                           float64  
+compliment_list_user                           float64  
+compliment_note_user                           float64  
+compliment_plain_user                          float64  
+compliment_cool_user                           float64  
+compliment_funny_user                          float64  
+compliment_writer_user                         float64  
+compliment_count_tip_idSum                       int64  
+compliment_count_tip_businessSum                 int64  
+businessCheckin_date                            object  
+dateDay_checkinSum                             float64  
+dateYear_checkinSum                            float64  
+dateYearMonth_checkinSum                       float64  
+dateYeaWeek_checkinSum                         float64  
+None
+======================================================================
+
+Summary - Complete Cases of Reviews + Business + User + Tip + Checkin:
+Number of Rows: 7952263, Columns: 46
+                                  Number of Unique Values  \
+review_id                                         7952263   
+user_id                                           2032516   
+business_id                                        106642   
+stars_reviews                                           5   
+useful_reviews                                        229   
+funny_reviews                                         189   
+cool_reviews                                          206   
+text_reviews                                      7935287   
+date_reviews                                      7825308   
+name_business                                       79920   
+address                                             86334   
+city                                                  623   
+state                                                  21   
+postal_code                                          4667   
+latitude                                            96789   
+longitude                                           95020   
+stars_business                                          9   
+review_countbusiness                                 1281   
+is_open                                                 2   
+attributes_business                                 75159   
+categories_business                                 61875   
+hours_business                                      38206   
+review_count_user                                    1917   
+yelping_since_user                                2024363   
+useful                                               5184   
+funny_user                                           3666   
+cool_user                                            4363   
+eliter_user                                          1227   
+average_stars_user                                    401   
+compliment_hot_user                                  1311   
+compliment_more_user                                  349   
+compliment_profile_user                               345   
+compliment_cute_user                                  315   
+compliment_list_user                                  190   
+compliment_note_user                                  959   
+compliment_plain_user                                1638   
+compliment_cool_user                                 1575   
+compliment_funny_user                                1575   
+compliment_writer_user                                818   
+compliment_count_tip_idSum                             23   
+compliment_count_tip_businessSum                       27   
+businessCheckin_date                               106642   
+dateDay_checkinSum                                   2686   
+dateYear_checkinSum                                  2686   
+dateYearMonth_checkinSum                             2686   
+dateYeaWeek_checkinSum                               2686   
+
+                                  Number of Missing Values  \
+review_id                                                0   
+user_id                                                  0   
+business_id                                              0   
+stars_reviews                                            0   
+useful_reviews                                           0   
+funny_reviews                                            0   
+cool_reviews                                             0   
+text_reviews                                             0   
+date_reviews                                             0   
+name_business                                            0   
+address                                                  0   
+city                                                     0   
+state                                                    0   
+postal_code                                              0   
+latitude                                                 0   
+longitude                                                0   
+stars_business                                           0   
+review_countbusiness                                     0   
+is_open                                                  0   
+attributes_business                                      0   
+categories_business                                      0   
+hours_business                                           0   
+review_count_user                                        0   
+yelping_since_user                                       0   
+useful                                                   0   
+funny_user                                               0   
+cool_user                                                0   
+eliter_user                                              0   
+average_stars_user                                       0   
+compliment_hot_user                                      0   
+compliment_more_user                                     0   
+compliment_profile_user                                  0   
+compliment_cute_user                                     0   
+compliment_list_user                                     0   
+compliment_note_user                                     0   
+compliment_plain_user                                    0   
+compliment_cool_user                                     0   
+compliment_funny_user                                    0   
+compliment_writer_user                                   0   
+compliment_count_tip_idSum                               0   
+compliment_count_tip_businessSum                         0   
+businessCheckin_date                                     0   
+dateDay_checkinSum                                       0   
+dateYear_checkinSum                                      0   
+dateYearMonth_checkinSum                                 0   
+dateYeaWeek_checkinSum                                   0   
+
+                                 Data type of variable  
+review_id                                       object  
+user_id                                         object  
+business_id                                     object  
+stars_reviews                                  float64  
+useful_reviews                                 float64  
+funny_reviews                                  float64  
+cool_reviews                                   float64  
+text_reviews                                    object  
+date_reviews                            datetime64[ns]  
+name_business                                   object  
+address                                         object  
+city                                            object  
+state                                           object  
+postal_code                                     object  
+latitude                                       float64  
+longitude                                      float64  
+stars_business                                 float64  
+review_countbusiness                           float64  
+is_open                                        float64  
+attributes_business                             object  
+categories_business                             object  
+hours_business                                  object  
+review_count_user                              float64  
+yelping_since_user                              object  
+useful                                         float64  
+funny_user                                     float64  
+cool_user                                      float64  
+eliter_user                                     object  
+average_stars_user                             float64  
+compliment_hot_user                            float64  
+compliment_more_user                           float64  
+compliment_profile_user                        float64  
+compliment_cute_user                           float64  
+compliment_list_user                           float64  
+compliment_note_user                           float64  
+compliment_plain_user                          float64  
+compliment_cool_user                           float64  
+compliment_funny_user                          float64  
+compliment_writer_user                         float64  
+compliment_count_tip_idSum                       int64  
+compliment_count_tip_businessSum                 int64  
+businessCheckin_date                            object  
+dateDay_checkinSum                             float64  
+dateYear_checkinSum                            float64  
+dateYearMonth_checkinSum                       float64  
+dateYeaWeek_checkinSum                         float64  
+None
+======================================================================
