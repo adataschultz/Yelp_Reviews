@@ -23,16 +23,16 @@ os.environ['Yelp_Review_EDA'] = str(seed_value)
 random.seed(seed_value)
 np.random.seed(seed_value)
 
+# Set path
+path = r'D:\Yelp_Reviews\Data'
+os.chdir(path)
+
 # Write results to log file
 stdoutOrigin=sys.stdout 
 sys.stdout = open('Yelp_Reviews_Preprocess.log.txt', 'w')
 
 print('\nYelp Reviews Preprocess for Warehouse Construction') 
 print('======================================================================')
-
-# Set path
-path = r'D:\Yelp_Reviews\Data'
-os.chdir(path)
 
 # Define function for initial EDA
 def data_summary(df):
@@ -283,7 +283,7 @@ df_checkin1['businessCheckin_hourNumber'] = df_checkin1.businessCheckin_date.dt.
 mask = df_checkin1['businessCheckin_hourNumber'] >= 12
 df_checkin1.loc[mask, 'businessCheckin_hourNumber'] = 'PM'
 
-mask = df_checkin1['businessCheckin_hourNumber'] !='PM'
+mask = df_checkin1['businessCheckin_hourNumber'] != 'PM'
 df_checkin1.loc[mask, 'businessCheckin_hourNumber'] = 'AM'
 
 # Get count of date for each checkin for each business id
@@ -391,10 +391,16 @@ print('======================================================================')
 # Process business hours to non-dictionary by subsetting id with hours
 df1 = df[['business_id', 'hours_business']]
 
+df1 = df1.copy()
+df1.loc[:,'hours_businessOriginal'] = df1['hours_business']
+
 # Extract each day and hours open/closed as a row for each business id
-df1 = df1.set_index(['business_id']).apply(lambda x: x.str.split(',').explode()).reset_index()   
+df1 = df1.set_index(['business_id', 'hours_businessOriginal']).apply(lambda x: x.str.split(',').explode()).reset_index()   
+  
 df1 = df1.drop_duplicates()
-print('\nDimensions of Exploded Business Open/Closed Days/Hours:', df1.shape) #(598201, 2)
+df1 = df1[df1['business_id'].notna()]
+
+print('\nDimensions of Exploded Business Open/Closed Days/Hours:', df1.shape) 
 print('======================================================================')
 
 # Process dictionary further for regex characteristics
@@ -406,6 +412,9 @@ df1.loc[:,'hours_business'] =  df1['hours_business'].str.replace(r'{', '',
 df1.loc[:,'hours_business'] =  df1['hours_business'].str.replace(r'}', '', 
                                                                  regex=True)
 
+# Set original business dictionary in index so format is retained
+df1 = df1.set_index(['hours_businessOriginal'])
+
 # Remove single quotes
 df1 = df1.replace("'", "", regex=True)
 
@@ -415,8 +424,11 @@ df1 = df1.drop_duplicates()
 
 # Find how many unique business day/hours
 print('\nNumber of Unique business hours after removing Regex characteristics:',
-      df1[['hours_business']].nunique()) #9183
+      df1[['hours_business']].nunique()) 
 print('======================================================================') 
+
+# Reset index of df
+df1 = df1.reset_index()
 
 # Filter businesses with no hours for open or closed
 df2 = df1[(df1['hours_business'] == 'None')]
@@ -427,12 +439,12 @@ df2.loc[:,'hoursBusiness_day'] = 'NA'
 df2.loc[:,'hours_working'] = 'NA'
 df2.loc[:,'hours_businessOpen'] = 'NA'
 df2.loc[:,'hours_businessOpen2'] = 'NA'
-print('\nDimensions of businesses with no open/closed hours:', df2.shape) #(16080, 6)
+print('\nDimensions of businesses with no open/closed hours:', df2.shape) 
 print('======================================================================') 
 
 # Filter businesses with hours provided
 df3 = df1[(df1['hours_business'] != 'None')]
-print('\nDimensions of businesses with no open/closed hours:', df3.shape)  #(582121, 2)
+print('\nDimensions of businesses with no open/closed hours:', df3.shape)  
 print('======================================================================') 
 
 # Extract day from the business hours
@@ -460,7 +472,7 @@ df4 = df4.copy()
 
 # Define midnight as '0' for military time
 df4.loc[:,'hours_businessOpen2'] = 0
-print('\nDimensions of businesses with open hours at Midnight:', df4.shape) #(582121, 2)
+print('\nDimensions of businesses with open hours at Midnight:', df4.shape) 
 print('======================================================================') 
 
 # Process time for non whole hour minutes
@@ -478,14 +490,14 @@ df5['hours_businessOpen1:'] = df5['hours_businessOpen1:'].astype(int)
 df5['hours_businessOpen2'] = df5['hours_businessOpen1:'] + df5['hours_businessOpen1']
 
 df5 = df5.drop(['hours_businessOpen1', 'hours_businessOpen1:'], axis=1)
-print('\nDimensions of businesses with non whole open hours:', df5.shape) #(539727, 6)
+print('\nDimensions of businesses with non whole open hours:', df5.shape) 
 print('======================================================================') 
 
 # Concatenate sets with no business open hours whole and non whole hours 
 data = [df2, df4, df5]
 df7 = pd.concat(data)
 print('\nDimensions of businesses with no & business hours open modified:',
-      df7.shape) #(598201, 6)
+      df7.shape)
 print('======================================================================') 
 
 del data, df2, df4, df5
@@ -493,6 +505,7 @@ del data, df2, df4, df5
 ###############################################################################
 # Filter businesses with no hours for creating when business closes
 df1 = df7[(df7['hours_business'] == 'None')]
+
 df1 = df1.copy()
 df1.loc[:,'hours_businessClosed'] = 'NA'
 df1.loc[:,'hours_businessClosed2'] = 'NA'
@@ -523,7 +536,7 @@ df3 = df2.loc[(df2['hours_businessClosed1:'] == 0) & (df2['hours_businessClosed1
 df3 = df3.drop(['hours_businessClosed1', 'hours_businessClosed1:'], axis=1)
 df3.loc[:,'hours_businessClosed2'] = 0
 print('\nDimensions of businesses with closing times that are midnight and whole hours:',
-      df3.shape) #(63313, 8)
+      df3.shape)
 print('======================================================================') 
 
 # Subset business closing times that are midnight and non whole hours
@@ -538,7 +551,7 @@ df4['hours_businessClosed2'] = df4['hours_businessClosed1:'] + df4['hours_busine
 
 df4 = df4.drop(['hours_businessClosed1', 'hours_businessClosed1:'], axis=1)
 print('\nDimensions of businesses with closing times that are midnight and non whole hours:',
-      df4.shape) #(995, 8)
+      df4.shape) 
 print('======================================================================') 
 
 # All non midnight closing on whole hours
@@ -552,7 +565,7 @@ df5['hours_businessClosed2'] = df5['hours_businessClosed1:'] + df5['hours_busine
 
 df5 = df5.drop(['hours_businessClosed1', 'hours_businessClosed1:'], axis=1)
 print('\nDimensions of businesses with closing times that are non midnight and whole hours:',
-      df5.shape) #(455785, 8)
+      df5.shape) 
 print('======================================================================') 
 
 # All non midnight closing not on whole hours
@@ -567,23 +580,88 @@ df6['hours_businessClosed2'] = df6['hours_businessClosed1:'] + df6['hours_busine
 
 df6 = df6.drop(['hours_businessClosed1', 'hours_businessClosed1:'], axis=1)
 print('\nDimensions of businesses with closing times that are non midnight and non whole hours:',
-      df6.shape) #(62028, 8)
+      df6.shape) 
 print('======================================================================') 
 
-# Concatenate sets with no business open hours whole and non whole hours 
+# Concatenate sets with no business closing hours whole and non whole hours 
 data = [df1, df3, df4, df5, df6]
-data = pd.concat(data)
-print('\nDimensions of businesses with no & business hours open/closed modified:',
-      data.shape) #(598201, 8)
+df1 = pd.concat(data)
+
+df1 = df1.drop(['hours_businessOpen', 'hours_businessClosed'], axis=1)
+df1 = df1.drop_duplicates()
+
+print('\nDimensions of businesses with no & business hours closed modified:',
+      df1.shape)
 print('======================================================================') 
 
-del df1, df3, df4, df5, df6
+del data, df2, df3, df4, df5, df6
 
-##############################################################################
+# Rename created variables
+df1.rename(columns={'hours_businessOpen2':'hours_businessOpen',
+                    'hours_businessClosed2':'hours_businessClosed'}, 
+           inplace=True)
+
+# Find businesses who do not have hours for open or closed
+df2 = df1[(df1['hours_working'] == 'NA')]
+
+# Feature engineer variables for concatenation
+df2 = df2.copy()
+df2.loc[:,'hours_businessOpenDaily'] = 'NA'
+df2.loc[:,'hours_businessOpen_amPM'] = 'NA'
+df2.loc[:,'hours_businessClosed_amPM'] = 'NA'
+
+# Find businesses who have business hours that are not missing
+df1 = df1[(df1['hours_working'] != 'NA')]
+
+# Create feature for number of hours each day
+df1 = df1.copy()
+df1['hours_businessOpen'] = df1['hours_businessOpen'].astype('float64')
+df1['hours_businessClosed'] = df1['hours_businessClosed'].astype('float64')
+df1['hours_businessOpenDaily'] = df1['hours_businessClosed'] - df1['hours_businessOpen']
+
+# Create PM/AM time in the day for when business opens
+mask = df1['hours_businessOpen'] >= 12
+df1.loc[mask, 'hours_businessOpen_amPM'] = 'PM'
+
+mask = df1['hours_businessOpen_amPM'] !='PM'
+df1.loc[mask, 'hours_businessOpen_amPM'] = 'AM'
+
+# Create PM/AM time in the day for when business closes
+mask = df1['hours_businessClosed'] >= 12
+df1.loc[mask, 'hours_businessClosed_amPM'] = 'PM'
+
+mask = df1['hours_businessClosed_amPM'] !='PM'
+df1.loc[mask, 'hours_businessClosed_amPM'] = 'AM'
+
+# Concatenate sets with NA business hours and ones with data
+df1 = pd.concat([df1, df2])
+
+# Rename processed business hours since Regex allowed for new vars
+df1.rename(columns={'hours_business': 'hours_businessRegex'}, inplace=True)
+
+# Join main table with processed business hours variables
+df = df.copy()
+df['business_id'] = df['business_id'].astype(str)
+df['hours_business'] = df['hours_business'].astype(str)
+
+df1 = df1.copy()
+df1['business_id'] = df1['business_id'].astype(str)
+df1['hours_businessOriginal'] = df1['hours_businessOriginal'].astype(str)
+
+# Join main table with business hours table
+df = pd.merge(df, df1, how='outer', left_on=['business_id', 'hours_business'], 
+               right_on=['business_id', 'hours_businessOriginal'])
+df = df.drop_duplicates(subset=['review_id'])
+
+del df1
+
+print('\nSummary - Preprocessing Yelp Reviews for Category:')
+print(data_summary(df))
+print('======================================================================')
+
 ###############################################################################
-# Write businessHours to pickle file
-pd.to_pickle(data, './211229_YelpReviews_businessHours.pkl')
-
+# TBD: Process attributes of the different businesses
+###############################################################################
 # Close to create log file
 sys.stdout.close()
 sys.stdout=stdoutOrigin
@@ -591,16 +669,16 @@ sys.stdout=stdoutOrigin
 ###############################################################################
 ########################### Exploratory Data Analysis #########################
 ###############################################################################
+# Set path for EDA
+path = r'D:\Yelp_Reviews\EDA'
+os.chdir(path)
+
 # Write results to log file
 stdoutOrigin=sys.stdout 
 sys.stdout = open('Yelp_Reviews_EDA.log.txt', 'w')
 
 print('\nYelp Reviews EDA') 
 print('======================================================================')
-
-# Set path for EDA
-path = r'D:\Yelp_Reviews\EDA'
-os.chdir(path)
 
 # Subset quantitative vars from reviews and business for graphing
 df_num = df[['stars_reviews', 'useful_reviews', 'funny_reviews', 'cool_reviews',
@@ -938,64 +1016,12 @@ fig.savefig('EDA_Quant_Countplot_ComplimentCountSumBusiness_output.png',
 
 del df_num3, df_num
 
-
-# Find the top 30 restaurants by count for graphing
-top30_complimentsID = df.compliment_count_tip_businessSum.max().index[:,:].tolist()
-
-top30_complimentsIDCount = len(top30_complimentsID)
-total_businessID = len(df['compliment_count_tip_businessSum'])
-
-print('\nPercentage of top 30 restaurants IDs of total: ' +  str((top30_complimentsIDCount/total_businessID)*100))
-
-# Filter top 30 restaurants by count
-top30_complimentsID = df.loc[df['compliment_count_tip_businessSum'].isin(top30_complimentsID)]
-
-# Plot the mean stars on reviews in the top 30 restaurants 
-print('\nAverage Review Rating of 30 Most Frequent Restaurants')
-print(top30_complimentsID.groupby(top30_complimentsID.name_business)['stars_reviews'].mean().sort_values(ascending=False))
-top30_complimentsID.groupby(top30_complimentsID.name_business)['stars_reviews'].mean().sort_values(ascending=True).plot(kind='barh', 
-                                                                                                                    figsize=(12, 10))
-plt.title('Average Review Rating of 30 Most Frequent Restaurants',
-          fontsize=20)
-plt.ylabel('Name of Restaurant', fontsize=18)
-plt.xlabel('Average Review Rating', fontsize=18)
-plt.yticks(fontsize=18)
-plt.savefig('AverageReviewRating_Top30RatedRestaurants_Yelp.png', 
-            bbox_inches='tight', dpi=my_dpi * 10)
-print('======================================================================')
-
-##
-# Find the top 30 restaurants by count for graphing
-top30_complimentsID = df.compliment_count_tip_idSum.value_counts().index[:30].tolist()
-
-top30_complimentsIDCount = len(top30_complimentsID)
-total_businessID = df['compliment_count_tip_idSum'].nunique()
-
-print('\nPercentage of top 30 restaurants IDs of total: ' +  str((top30_complimentsIDCount/total_businessID)*100))
-
-# Filter top 30 restaurants by count
-top30_complimentsID = df.loc[df['compliment_count_tip_idSum'].isin(top30_complimentsID)]
-
-# Plot the mean stars on reviews in the top 30 restaurants 
-print('\nAverage Review Rating of 30 Most Frequent Restaurants')
-print(top30_complimentsID.groupby(top30_complimentsID.name_business)['stars_reviews'].mean().sort_values(ascending=False))
-top30_complimentsID.groupby(top30_complimentsID.name_business)['stars_reviews'].mean().sort_values(ascending=True).plot(kind='barh', 
-                                                                                                                    figsize=(12, 10))
-plt.title('Average Review Rating of 30 Most Frequent Restaurants',
-          fontsize=20)
-plt.ylabel('Name of Restaurant', fontsize=18)
-plt.xlabel('Average Review Rating', fontsize=18)
-plt.yticks(fontsize=18)
-plt.savefig('AverageReviewRating_Top30RatedRestaurants_Yelp.png', 
-            bbox_inches='tight', dpi=my_dpi * 10)
-print('======================================================================')
-
 # Close to create log file
 sys.stdout.close()
 sys.stdout=stdoutOrigin
 
 ###############################################################################
 # Write warehouse to pickle file
-pd.to_pickle(df, './211220_YelpReviews.pkl')
+pd.to_pickle(df, './220104_YelpReviews.pkl')
 
 ##############################################################################

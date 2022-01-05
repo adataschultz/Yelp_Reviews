@@ -885,6 +885,228 @@ businessCheckin_date                            object
 dateDay_checkinSum                             float64  
 dateYear_checkinSum                            float64  
 dateYearMonth_checkinSum                       float64  
+
+======================================================================
+
+Dimensions of Exploded Business Open/Closed Days/Hours: (598201, 3)
+======================================================================
+
+Number of Unique business hours after removing Regex characteristics: hours_business    9183
+dtype: int64
+======================================================================
+
+Dimensions of businesses with no open/closed hours: (16080, 7)
+======================================================================
+
+Dimensions of businesses with no open/closed hours: (582121, 3)
+======================================================================
+
+Dimensions of businesses with open hours at Midnight: (42394, 7)
+======================================================================
+
+Dimensions of businesses with non whole open hours: (539727, 7)
+======================================================================
+
+Dimensions of businesses with no & business hours open modified: (598201, 7)
+======================================================================
+
+Dimensions of businesses with closing times that are midnight and whole hours: (63313, 9)
+======================================================================
+
+Dimensions of businesses with closing times that are midnight and non whole hours: (995, 9)
+======================================================================
+
+Dimensions of businesses with closing times that are non midnight and whole hours: (455785, 9)
+======================================================================
+
+Dimensions of businesses with closing times that are non midnight and non whole hours: (62028, 9)
+======================================================================
+
+Dimensions of businesses with no & business hours closed modified: (598201, 7)
+======================================================================
+
+Summary - Preprocessing Yelp Reviews for Business Hours:
+Number of Rows: 7952263, Columns: 58
+                                  Number of Unique Values  \
+review_id                                         7952263   
+user_id                                           2032516   
+business_id                                        106642   
+stars_reviews                                           5   
+useful_reviews                                        229   
+funny_reviews                                         189   
+cool_reviews                                          206   
+text_reviews                                      7935287   
+date_reviews                                      7825308   
+name_business                                       79920   
+address                                             86334   
+city                                                  623   
+state                                                  21   
+postal_code                                          4667   
+latitude                                            96789   
+longitude                                           95020   
+stars_business                                          9   
+review_countbusiness                                 1281   
+is_open                                                 2   
+attributes_business                                 75159   
+hours_business                                      38206   
+review_count_user                                    1917   
+yelping_since_user                                2024363   
+useful_user                                          5184   
+funny_user                                           3666   
+cool_user                                            4363   
+elite_user                                           1227   
+average_stars_user                                    401   
+compliment_hot_user                                  1311   
+compliment_more_user                                  349   
+compliment_profile_user                               345   
+compliment_cute_user                                  315   
+compliment_list_user                                  190   
+compliment_note_user                                  959   
+compliment_plain_user                                1638   
+compliment_cool_user                                 1575   
+compliment_funny_user                                1575   
+compliment_writer_user                                818   
+compliment_count_tip_idSum                             23   
+compliment_count_tip_businessSum                       27   
+businessCheckin_date                               106642   
+dateDay_checkinSum                                   2686   
+dateYear_checkinSum                                  2686   
+dateYearMonth_checkinSum                             2686   
+dateYearWeek_checkinSum                              2686   
+categories_combined                                  1067   
+date_reviews_Year                                      18   
+date_reviews_YearMonth                                196   
+date_reviews_YearWeek                                 853   
+hours_businessOriginal                              38206   
+hours_businessRegex                                  2868   
+hoursBusiness_day                                       8   
+hours_working                                        1231   
+hours_businessOpen                                     86   
+hours_businessClosed                                   94   
+hours_businessOpenDaily                               165   
+hours_businessOpen_amPM                                 3   
+hours_businessClosed_amPM                               3   
+
+                                  Number of Missing Values  \
+review_id                                                0   
+user_id                                                  0   
+business_id                                              0   
+stars_reviews                                            0   
+useful_reviews                                           0   
+funny_reviews                                            0   
+cool_reviews                                             0   
+text_reviews                                             0   
+date_reviews                                             0   
+name_business                                            0   
+address                                                  0   
+city                                                     0   
+state                                                    0   
+postal_code                                              0   
+latitude                                                 0   
+longitude                                                0   
+stars_business                                           0   
+review_countbusiness                                     0   
+is_open                                                  0   
+attributes_business                                      0   
+hours_business                                           0   
+review_count_user                                        0   
+yelping_since_user                                       0   
+useful_user                                              0   
+funny_user                                               0   
+cool_user                                                0   
+elite_user                                               0   
+average_stars_user                                       0   
+compliment_hot_user                                      0   
+compliment_more_user                                     0   
+compliment_profile_user                                  0   
+compliment_cute_user                                     0   
+compliment_list_user                                     0   
+compliment_note_user                                     0   
+compliment_plain_user                                    0   
+compliment_cool_user                                     0   
+compliment_funny_user                                    0   
+compliment_writer_user                                   0   
+compliment_count_tip_idSum                               0   
+compliment_count_tip_businessSum                         0   
+businessCheckin_date                                     0   
+dateDay_checkinSum                                       0   
+dateYear_checkinSum                                      0   
+dateYearMonth_checkinSum                                 0   
+dateYearWeek_checkinSum                                  0   
+categories_combined                                      0   
+date_reviews_Year                                        0   
+date_reviews_YearMonth                                   0   
+date_reviews_YearWeek                                    0   
+hours_businessOriginal                                   0   
+hours_businessRegex                                      0   
+hoursBusiness_day                                        0   
+hours_working                                            0   
+hours_businessOpen                                       0   
+hours_businessClosed                                     0   
+hours_businessOpenDaily                                  0   
+hours_businessOpen_amPM                                  0   
+hours_businessClosed_amPM                                0   
+
+                                 Data type of variable  
+review_id                                       object  
+user_id                                         object  
+business_id                                     object  
+stars_reviews                                  float64  
+useful_reviews                                 float64  
+funny_reviews                                  float64  
+cool_reviews                                   float64  
+text_reviews                                    object  
+date_reviews                            datetime64[ns]  
+name_business                                   object  
+address                                         object  
+city                                            object  
+state                                           object  
+postal_code                                     object  
+latitude                                       float64  
+longitude                                      float64  
+stars_business                                 float64  
+review_countbusiness                           float64  
+is_open                                        float64  
+attributes_business                             object  
+hours_business                                  object  
+review_count_user                              float64  
+yelping_since_user                              object  
+useful_user                                    float64  
+funny_user                                     float64  
+cool_user                                      float64  
+elite_user                                      object  
+average_stars_user                             float64  
+compliment_hot_user                            float64  
+compliment_more_user                           float64  
+compliment_profile_user                        float64  
+compliment_cute_user                           float64  
+compliment_list_user                           float64  
+compliment_note_user                           float64  
+compliment_plain_user                          float64  
+compliment_cool_user                           float64  
+compliment_funny_user                          float64  
+compliment_writer_user                         float64  
+compliment_count_tip_idSum                       int64  
+compliment_count_tip_businessSum                 int64  
+businessCheckin_date                            object  
+dateDay_checkinSum                             float64  
+dateYear_checkinSum                            float64  
+dateYearMonth_checkinSum                       float64  
+dateYearWeek_checkinSum                        float64  
+categories_combined                             object  
+date_reviews_Year                                int64  
+date_reviews_YearMonth                       period[M]  
+date_reviews_YearWeek                           object  
+hours_businessOriginal                          object  
+hours_businessRegex                             object  
+hoursBusiness_day                               object  
+hours_working                                   object  
+hours_businessOpen                              object  
+hours_businessClosed                            object  
+hours_businessOpenDaily                         object  
+hours_businessOpen_amPM                         object  
+hours_businessClosed_amPM                       object  
+======================================================================
 dateYeaWeek_checkinSum                         float64  
 None
 ======================================================================
