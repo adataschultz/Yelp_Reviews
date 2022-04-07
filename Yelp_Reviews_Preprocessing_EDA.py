@@ -1022,6 +1022,21 @@ sys.stdout=stdoutOrigin
 
 ###############################################################################
 # Write warehouse to pickle file
-pd.to_pickle(df, './220104_YelpReviews.pkl')
+pd.to_pickle(df, './YelpReviews.pkl')
 
-##############################################################################
+###############################################################################
+# Write processed data to csv
+df.to_csv('YelpReviews_final.csv', index=False)
+
+###############################################################################
+# Write processed data to csv for further EDA
+# Drop large string data
+df = df.drop(['text_reviews', 'hours_business', 'hours_working',
+               'hours_businessRegex', 'address',
+               'hours_businessOriginal', 'attributes_business',
+               'postal_code', 'latitude',
+               'longitude', 'businessCheckin_date', 'elite_user'], axis=1)
+
+df.to_csv('YelpReviews_final_EDA.csv', index=False, encoding='utf-8-sig')
+
+###############################################################################
