@@ -52,3 +52,5 @@ df = shuffle(df)
 
 # Write parquet for colab 
 df.to_parquet('YelpReviews_NLP_125stars_tokenized.parquet')
+
+###############################################################################
