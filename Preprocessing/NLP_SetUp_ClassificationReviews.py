@@ -26,29 +26,28 @@ os.chdir(path)
 df = pd.read_pickle('./YelpReviews_NLP.pkl')
 
 # Subset columns for classification
-df = df[['cleanReview', 'stars_reviews']]
+df = df[['cleanReview', 'stars_reviews', 'sentiment']]
 
 # Recode to balance sets
-df[['review_rank']] = df[['stars_reviews']]
-df['review_rank'].mask(df['review_rank'] == 1, 0, inplace=True)
-df['review_rank'].mask(df['review_rank'] == 2, 0, inplace=True)
-df['review_rank'].mask(df['review_rank'] == 5, 1, inplace=True)
+df['stars_reviews'].mask(df['stars_reviews'] == 1, 0, inplace=True)
+df['stars_reviews'].mask(df['stars_reviews'] == 2, 0, inplace=True)
+df['stars_reviews'].mask(df['stars_reviews'] == 5, 1, inplace=True)
 
 # Filter and sample 5 star reviews
-df1 = df[df.review_rank==1]
-df1 = df1.sample(n=770743)
+df1 = df[df.stars_reviews==1]
+df1 = df1.sample(n=414937)
 
 # Filter and sample 1 & 2 star reviews
-df2 = df[df.review_rank==0]
+df2 = df[df.stars_reviews==0]
+df2 = df2.sample(n=414937)
 
 # Concat and shuffle
 df = pd.concat([df1, df2])
 df = shuffle(df)
-df = df.drop(['review_rank'], axis=1)
 
 del df1, df2
 
 # Write parquet for colab 
-df.to_parquet('YelpReviews_NLP_125stars_tokenized.parquet')
+df.to_parquet('YelpReviews_NLP_125stars.parquet')
 
 ###############################################################################

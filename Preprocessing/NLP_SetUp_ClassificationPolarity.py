@@ -55,14 +55,13 @@ print(df[['stars_reviews', 'sentiment']].value_counts())
 pd.to_pickle(df, './YelpReviews_NLP_sentiment.pkl')
 
 # Recode sentiment for filtering out positve and negative polarity
-df[['review_rank']] = df[['sentiment']]
-df['review_rank'].mask(df['review_rank'] == 'Negative', 0, inplace=True)
-df['review_rank'].mask(df['review_rank'] == 'Positive', 1, inplace=True)
+df['sentiment'].mask(df['sentiment'] == 'Negative', 0, inplace=True)
+df['sentiment'].mask(df['sentiment'] == 'Positive', 1, inplace=True)
 
 # Sample equivalent size for balanced classes
-df1 = df[df.review_rank==1]
+df1 = df[df.sentiment==1]
 df1 = df1.sample(n=414937)
-df2 = df[df.review_rank==0]
+df2 = df[df.sentiment==0]
 
 # Concat and shuffle
 df = pd.concat([df1, df2])
@@ -70,6 +69,6 @@ df = shuffle(df)
 del df1, df2
 
 df = df[['cleanReview', 'sentiment', 'stars_reviews']]
-df.to_parquet('YelpReviews_NLP_sentimentNegPos_tokenized.parquet')
+df.to_parquet('YelpReviews_NLP_sentimentNegPos.parquet')
 
 ###############################################################################
