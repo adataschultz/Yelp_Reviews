@@ -1,9 +1,0 @@
-name,model,model params,accuracy train,accuracy test,custom accuracy train,custom accuracy test
-GloVe- Random Forest,"Pipeline(steps=[('Word2Vec Vectorizer',
-                 <__main__.W2vVectorizer object at 0x000002225EF595B0>),
-                ('Random Forest',
-                 RandomForestClassifier(criterion='entropy', max_depth=7))])","{'Random Forest__criterion': 'entropy', 'Random Forest__max_depth': 7, 'Random Forest__n_estimators': 100}",0.8056,0.8023,0.9028,0.9012
-Random Forest,"Pipeline(steps=[('Word2Vec Vectorizer',
-                 <__main__.W2vVectorizer object at 0x00000222792CB280>),
-                ('Random Forest',
-                 RandomForestClassifier(criterion='entropy', max_depth=7))])","{'Random Forest__criterion': 'entropy', 'Random Forest__max_depth': 7, 'Random Forest__n_estimators': 100}",0.9028,0.9015,0.9514,0.9507

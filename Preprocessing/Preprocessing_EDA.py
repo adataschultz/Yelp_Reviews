@@ -493,19 +493,16 @@ df2 = df7[(df7['hours_business'] != 'None')]
 df2['hours_businessClosed'] = df2['hours_business'].str.rsplit('-').str[1]
 df2['hours_businessClosed1'] = df2['hours_business'].str.rsplit('-').str[1]
 
+# Extract the time before the : when the business closes
 df2['hours_businessClosed1'] = df2['hours_businessClosed1'].str.rsplit(':').str[0]
+# Convert data types
 df2['hours_businessClosed1'] = df2['hours_businessClosed1'].astype(float)
 
-df2['hours_businessClosed1:'] = df2['hours_businessClosed'].str.rsplit(':').str[-1]
-df2['hours_businessClosed1:'] = df2['hours_businessClosed1:'].astype(float)
-df2.tail()
-
-# Extract the time before the : when the business closes
-
 # Extract when the business closes after the whole hour for minutes
-
+df2['hours_businessClosed1:'] = df2['hours_businessClosed'].str.rsplit(':').str[-1]
 # Convert data types
-
+df2['hours_businessClosed1:'] = df2['hours_businessClosed1:'].astype(float)
+print(df2.tail())
 
 # Subset business closing times that are midnight and whole hours
 df3 = df2.loc[(df2['hours_businessClosed1'] == 0) & (df2['hours_businessClosed1:'] == 0)]
@@ -549,7 +546,6 @@ print('======================================================================')
 
 # Filter businesses with no hours for creating when business closes
 df1 = df7[(df7['hours_business'] == 'None')]
-
 df1['hours_businessClosed'] = 'NA'
 df1['hours_businessClosed2'] = 'NA'
 
@@ -627,7 +623,7 @@ df1 = pd.concat([df2,df3])
 
 del df2, df3
 
-df1.head()
+print(df1.head())
 print('======================================================================') 
 
 # Join main table with processed business hours variables
@@ -673,18 +669,7 @@ print(df['is_open'].value_counts(normalize=True) * 100)
 print('======================================================================')
 
 # Drop is_open since binary
-df_num = df_num.drop(['is_open'], axis=1)
-
-# Hist plots of quant vars
-plt.rcParams.update({'font.size': 10})
-fig, ax = plt.subplots(2, 3, figsize=(10,7))
-fig.suptitle('Histograms of Quantitative Variables in Yelp Reviews & Businesses',
-             fontsize=25)
-for variable, subplot in zip(df_num, ax.flatten()):
-    sns.histplot(x=df_num[variable], kde=True, ax=subplot)
-plt.tight_layout()
-fig.savefig('EDA_Quant_Histplot_ReviewsBusiness.png', dpi=my_dpi*10,
-            bbox_inches='tight') 
+df_num1 = df_num.drop(['is_open'], axis=1)
 
 # Box-and-whisker plots of quant vars
 sns.set_style('whitegrid')
@@ -692,20 +677,31 @@ plt.rcParams.update({'font.size': 15})
 fig, ax = plt.subplots(2, 3, figsize=(10,7))
 fig.suptitle('Boxplots of Quantitative Variables in Reviews & Businesses',
              fontsize=25)
-for var, subplot in zip(df_num, ax.flatten()):
-    sns.boxplot(x=df_num[var], data=df_num, ax=subplot)
+for var, subplot in zip(df_num1, ax.flatten()):
+    sns.boxplot(x=df_num1[var], data=df_num1, ax=subplot)
 plt.tight_layout()
 fig.savefig('EDA_Quant_Boxplots_ReviewsBusiness.png', dpi=my_dpi*10,
             bbox_inches='tight')
+
+# Hist plots of quant vars
+plt.rcParams.update({'font.size': 10})
+fig, ax = plt.subplots(2, 3, figsize=(15,10))
+fig.suptitle('Histograms of Quantitative Variables in Yelp Reviews & Businesses',
+             fontsize=25)
+for variable, subplot in zip(df_num1, ax.flatten()):
+    sns.histplot(x=df_num1[variable], kde=True, ax=subplot)
+plt.tight_layout()
+fig.savefig('EDA_Quant_Histplot_ReviewsBusiness.png', dpi=my_dpi*10,
+            bbox_inches='tight') 
 
 # Count plot to examine quant vars
 df_num = df_num.drop(['useful_reviews', 'funny_reviews', 'cool_reviews'],
                       axis=1)
 
 plt.rcParams.update({'font.size': 15})
-fig, ax = plt.subplots(1, 4, figsize=(20,10))
+fig, ax = plt.subplots(1, 4, figsize=(15,10))
 fig.suptitle('Countplots of Quantitative Variables in Yelp Reviews & Businesses',
-             fontsize=35)
+             fontsize=20)
 for var, subplot in zip(df_num, ax.flatten()):
     sns.countplot(x=df_num[var], ax=subplot)
 plt.tight_layout()
@@ -919,13 +915,13 @@ plt.savefig('AverageStars_Users.png', bbox_inches='tight',
 df_num1 = df_num[['useful_user', 'funny_user', 'cool_user']]
 
 # Histplots of quant vars in User
-plt.rcParams.update({'font.size': 10})
-fig, ax = plt.subplots(1, 3, figsize=(15, 10))
+plt.rcParams.update({'font.size': 5})
+fig, ax = plt.subplots(1, 3, figsize=(5, 5))
 fig.suptitle('Histograms of Quantitative Variables in Users on Yelp Reviews') 
 for var, subplot in zip(df_num1, ax.flatten()):
     sns.histplot(x=df_num1[var], kde=True, ax=subplot)
-    plt.ylim(0, 50000)
-plt.tight_layout()  
+    plt.ylim(min(var), max(var)) 
+fig.tight_layout()  
 fig.savefig('EDA_Quant_Histplot_User_3var.png', dpi=my_dpi*10,
             bbox_inches='tight') 
 
@@ -961,7 +957,6 @@ df_category_split = df_category_split.set_index(['business_id'])
 df_category_split = df_category_split.stack().str.split(',',
                                                         expand=True).stack().unstack(-2).reset_index(-1,
                                                                                                      drop=True).reset_index()
-
 
 # Rename column for unique name
 df_category_split.rename(columns={'categories_business':
@@ -1028,7 +1023,7 @@ df.to_csv('YelpReviews_final.csv', index=False)
 ###############################################################################
 # Write processed data to csv for further EDA
 # Drop large string data
-df = df.drop(['text_reviews', 'hours_business', 'hours_working',
+df = df.drop(['hours_business', 'hours_working',
               'hours_businessRegex', 'address',
               'hours_businessOriginal', 'attributes_business',
               'postal_code', 'latitude',
